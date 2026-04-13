@@ -1,3 +1,5 @@
+import React from 'react';
+
 // ============== CÁC HÀM TIỆN ÍCH ==============
 
 function getWeekNumber(date) {
@@ -838,5 +840,4 @@ const App = () => {
   );
 };
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(React.createElement(App));
+export default App;
