@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <meta name="theme-color" content="#059669">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Quản lý lịch Spa - Phân ca luân phiên</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Cải thiện touch targets cho mobile */
+        button, 
+        .clickable,
+        [role="button"],
+        input[type="button"],
+        input[type="submit"] {
+            cursor: pointer;
+            min-height: 44px;
+            min-width: 44px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Ngăn zoom tự động trên iOS khi focus vào input */
+        @media (max-width: 768px) {
+            body {
+                font-size: 16px;
+            }
+            
+            input, 
+            select, 
+            textarea {
+                font-size: 16px !important;
+            }
+        }
+        
+        /* Scrollbar styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* Safe area cho notch và dynamic island */
+        .pt-safe {
+            padding-top: max(1rem, env(safe-area-inset-top));
+        }
+        
+        .pb-safe {
+            padding-bottom: max(1rem, env(safe-area-inset-bottom));
+        }
+        
+        .pl-safe {
+            padding-left: max(1rem, env(safe-area-inset-left));
+        }
+        
+        .pr-safe {
+            padding-right: max(1rem, env(safe-area-inset-right));
+        }
+        
+        /* Modal scroll lock */
+        body.modal-open {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Animation cho modal */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-overlay {
+            animation: fadeIn 0.2s ease-out;
+        }
+        
+        .modal-content {
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        /* Hover effects chỉ trên desktop */
+        @media (hover: hover) {
+            button:hover {
+                filter: brightness(0.95);
+            }
+        }
+        
+        /* Better touch scrolling */
+        .overflow-auto {
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Disable pull-to-refresh trên iOS khi kéo modal */
+        .no-pull-refresh {
+            overscroll-behavior: contain;
+        }
+        
+        html.dark {
+            color-scheme: dark;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel" src="App.jsx"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "spa-scheduler",
+  "version": "1.0.0",
+  "description": "Vietnamese Spa Shift Scheduling App",
+  "scripts": {
+    "start": "serve .",
+    "dev": "serve ."
+  }
+}
