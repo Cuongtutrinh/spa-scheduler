@@ -479,6 +479,7 @@ const App = () => {
   const [weekOffset, setWeekOffset] = React.useState(0);
   const [isEmployeeModalOpen, setIsEmployeeModalOpen] = React.useState(false);
   const [isGroupsModalOpen, setIsGroupsModalOpen] = React.useState(false);
+  const [isCaptureMode, setIsCaptureMode] = React.useState(false);
   const [currentMonday, setCurrentMonday] = React.useState(null);
   const [schedule, setSchedule] = React.useState([]);
   const [currentGroups, setCurrentGroups] = React.useState([]);
@@ -611,7 +612,7 @@ const App = () => {
         </div>
         
         {/* Employee count */}
-        {employees.length > 0 && (
+        {employees.length > 0 && !isCaptureMode && (
           <div className="bg-white rounded-lg shadow p-4 mb-4 md:mb-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 flex-wrap">
               <span className="text-gray-700 font-semibold text-sm md:text-base">👥 Số nhân viên:</span>
@@ -628,7 +629,7 @@ const App = () => {
         )}
         
         {/* Groups info */}
-        {employees.length > 0 && currentGroups.length > 0 && (
+        {employees.length > 0 && currentGroups.length > 0 && !isCaptureMode && (
           <GroupsInfo groups={currentGroups} weekNumber={weekNumber} isCustom={isCustomGroups} />
         )}
         
@@ -668,12 +669,18 @@ const App = () => {
                   <button onClick={goNextWeek} className="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg transition font-medium min-h-[44px] text-sm md:text-base">
                     Tuần sau →
                   </button>
+                  <button
+                    onClick={() => setIsCaptureMode(prev => !prev)}
+                    className={`${isCaptureMode ? 'bg-amber-600 text-white hover:bg-amber-700' : 'bg-amber-100 text-amber-800 hover:bg-amber-200'} px-4 py-2 rounded-lg transition font-medium min-h-[44px] text-sm md:text-base`}
+                  >
+                    {isCaptureMode ? 'Tắt chế độ ảnh tuần' : 'Bật chế độ ảnh tuần'}
+                  </button>
                 </div>
               </div>
             </div>
             
             {/* Legend */}
-            <div className="bg-white rounded-lg shadow p-3 md:p-4 mb-4 md:mb-6">
+            <div className={`${isCaptureMode ? 'hidden' : 'bg-white rounded-lg shadow p-3 md:p-4 mb-4 md:mb-6'}`}>
               <div className="flex flex-col md:flex-row gap-3 md:gap-4 justify-center items-center text-xs md:text-sm">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-blue-500 rounded"></div>
@@ -689,124 +696,100 @@ const App = () => {
               </div>
             </div>
             
-            {/* Schedule Table - Desktop */}
-            <div className="hidden md:block bg-white rounded-xl shadow-lg overflow-x-auto">
-              <table className="w-full">
+            {/* Schedule Table - All devices */}
+            <div className={`${isCaptureMode ? 'bg-white rounded-xl shadow-lg overflow-hidden border-2 border-amber-200' : 'bg-white rounded-xl shadow-lg overflow-hidden'}`}>
+              <table className="w-full table-fixed">
                 <thead className="bg-gradient-to-r from-green-600 to-blue-600 text-white">
                   <tr>
-                    {weekDays.map(day => <th key={day} className="p-4 text-center font-semibold text-lg">{day}</th>)}
+                    {weekDays.map(day => <th key={day} className={`${isCaptureMode ? 'p-1 text-[9px]' : 'p-1 md:p-4 text-[10px] md:text-lg'} text-center font-semibold`}>{day}</th>)}
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     {schedule.map((day, idx) => (
-                      <td key={idx} className="border border-gray-200 align-top p-3">
+                      <td key={idx} className={`${isCaptureMode ? 'border border-gray-200 align-top p-1' : 'border border-gray-200 align-top p-1 md:p-3'}`}>
                         {day.dayOfWeek === 1 ? (
-                          <div className="bg-green-50 rounded-lg p-3">
-                            <div className="text-sm font-semibold text-green-800 mb-2">🕘 9:00 – 20:00</div>
-                            <div className="text-sm text-gray-700 mb-2 font-medium">Toàn bộ nhân viên:</div>
-                            <div className="space-y-1 max-h-64 overflow-y-auto">
-                              {day.allEmployees?.map((emp, i) => (
-                                <div key={i} className="flex items-center gap-2 p-1">
-                                  <EmployeeAvatar name={emp} />
-                                  <span className="text-sm">{emp}</span>
-                                </div>
-                              ))}
+                          isCaptureMode ? (
+                            <div className="bg-green-50 rounded-lg p-1">
+                              <div className="text-[9px] font-semibold text-green-800 mb-1">9:00-20:00</div>
+                              <p className="text-[9px] leading-tight text-gray-700 break-words">
+                                {(day.allEmployees || []).join(', ')}
+                              </p>
                             </div>
-                          </div>
+                          ) : (
+                            <div className="bg-green-50 rounded-lg p-1.5 md:p-3">
+                              <div className="text-[10px] md:text-sm font-semibold text-green-800 mb-1 md:mb-2">🕘 9:00 – 20:00</div>
+                              <div className="text-[10px] md:text-sm text-gray-700 mb-1 md:mb-2 font-medium">Toàn bộ nhân viên:</div>
+                              <div className="space-y-1 max-h-56 md:max-h-64 overflow-y-auto">
+                                {day.allEmployees?.map((emp, i) => (
+                                  <div key={i} className="flex items-center gap-1 md:gap-2 p-0.5 md:p-1">
+                                    <div className="hidden md:block">
+                                      <EmployeeAvatar name={emp} />
+                                    </div>
+                                    <span className="text-[10px] leading-tight md:text-sm">{emp}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )
                         ) : (
-                          <div className="space-y-3">
-                            <div className="bg-blue-50 rounded-lg p-3 border-l-4 border-blue-500">
-                              <div className="text-sm font-semibold text-blue-800 mb-2">🕘 Ca A: 9:00 – 20:00</div>
-                              <div className="space-y-1 max-h-48 overflow-y-auto">
-                                {day.shiftA?.map((emp, i) => (
-                                  <div key={i} className="flex items-center gap-2 p-1">
-                                    <EmployeeAvatar name={emp} />
-                                    <span className="text-sm">{emp}</span>
-                                  </div>
-                                ))}
-                                {(!day.shiftA || day.shiftA.length === 0) && (
-                                  <p className="text-xs text-gray-400 italic">Không có nhân viên</p>
-                                )}
+                          isCaptureMode ? (
+                            <div className="space-y-1">
+                              <div className="bg-blue-50 rounded-lg p-1 border-l-2 border-blue-500">
+                                <div className="text-[9px] font-semibold text-blue-800 mb-1">A 9:00-20:00</div>
+                                <p className="text-[9px] leading-tight text-gray-700 break-words">
+                                  {(day.shiftA || []).join(', ') || 'Không có'}
+                                </p>
+                              </div>
+                              <div className="bg-purple-50 rounded-lg p-1 border-l-2 border-purple-500">
+                                <div className="text-[9px] font-semibold text-purple-800 mb-1">B 10:00-21:00</div>
+                                <p className="text-[9px] leading-tight text-gray-700 break-words">
+                                  {(day.shiftB || []).join(', ') || 'Không có'}
+                                </p>
                               </div>
                             </div>
-                            <div className="bg-purple-50 rounded-lg p-3 border-l-4 border-purple-500">
-                              <div className="text-sm font-semibold text-purple-800 mb-2">🕙 Ca B: 10:00 – 21:00</div>
-                              <div className="space-y-1 max-h-48 overflow-y-auto">
-                                {day.shiftB?.map((emp, i) => (
-                                  <div key={i} className="flex items-center gap-2 p-1">
-                                    <EmployeeAvatar name={emp} />
-                                    <span className="text-sm">{emp}</span>
-                                  </div>
-                                ))}
-                                {(!day.shiftB || day.shiftB.length === 0) && (
-                                  <p className="text-xs text-gray-400 italic">Không có nhân viên</p>
-                                )}
+                          ) : (
+                            <div className="space-y-1.5 md:space-y-3">
+                              <div className="bg-blue-50 rounded-lg p-1.5 md:p-3 border-l-2 md:border-l-4 border-blue-500">
+                                <div className="text-[10px] md:text-sm font-semibold text-blue-800 mb-1 md:mb-2">🕘 Ca A: 9:00 – 20:00</div>
+                                <div className="space-y-1 max-h-44 md:max-h-48 overflow-y-auto">
+                                  {day.shiftA?.map((emp, i) => (
+                                    <div key={i} className="flex items-center gap-1 md:gap-2 p-0.5 md:p-1">
+                                      <div className="hidden md:block">
+                                        <EmployeeAvatar name={emp} />
+                                      </div>
+                                      <span className="text-[10px] leading-tight md:text-sm">{emp}</span>
+                                    </div>
+                                  ))}
+                                  {(!day.shiftA || day.shiftA.length === 0) && (
+                                    <p className="text-[10px] md:text-xs text-gray-400 italic">Không có nhân viên</p>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="bg-purple-50 rounded-lg p-1.5 md:p-3 border-l-2 md:border-l-4 border-purple-500">
+                                <div className="text-[10px] md:text-sm font-semibold text-purple-800 mb-1 md:mb-2">🕙 Ca B: 10:00 – 21:00</div>
+                                <div className="space-y-1 max-h-44 md:max-h-48 overflow-y-auto">
+                                  {day.shiftB?.map((emp, i) => (
+                                    <div key={i} className="flex items-center gap-1 md:gap-2 p-0.5 md:p-1">
+                                      <div className="hidden md:block">
+                                        <EmployeeAvatar name={emp} />
+                                      </div>
+                                      <span className="text-[10px] leading-tight md:text-sm">{emp}</span>
+                                    </div>
+                                  ))}
+                                  {(!day.shiftB || day.shiftB.length === 0) && (
+                                    <p className="text-[10px] md:text-xs text-gray-400 italic">Không có nhân viên</p>
+                                  )}
+                                </div>
                               </div>
                             </div>
-                          </div>
+                          )
                         )}
                       </td>
                     ))}
                   </tr>
                 </tbody>
               </table>
-            </div>
-            
-            {/* Mobile view */}
-            <div className="md:hidden space-y-4">
-              {schedule.map((day, idx) => (
-                <div key={idx} className="bg-white rounded-xl shadow-lg p-4">
-                  <div className="text-lg font-bold text-gray-800 mb-3 pb-2 border-b">
-                    {weekDays[idx]} • {formatDate(day.date)}
-                  </div>
-                  
-                  {day.dayOfWeek === 1 ? (
-                    <div className="bg-green-50 rounded-lg p-3">
-                      <div className="font-semibold text-green-800 mb-2 text-sm">🕘 9:00 – 20:00</div>
-                      <div className="space-y-2">
-                        {day.allEmployees?.map((emp, i) => (
-                          <div key={i} className="flex items-center gap-2 p-1">
-                            <EmployeeAvatar name={emp} />
-                            <span className="text-sm">{emp}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <div className="bg-blue-50 rounded-lg p-3 mb-3">
-                        <div className="font-semibold text-blue-800 mb-2 text-sm">🕘 Ca A: 9:00 – 20:00</div>
-                        <div className="flex flex-wrap gap-2">
-                          {day.shiftA?.map((emp, i) => (
-                            <div key={i} className="flex items-center gap-1 bg-white rounded-full px-3 py-1.5 shadow-sm">
-                              <EmployeeAvatar name={emp} />
-                              <span className="text-sm">{emp}</span>
-                            </div>
-                          ))}
-                          {(!day.shiftA || day.shiftA.length === 0) && (
-                            <p className="text-xs text-gray-400 italic">Không có nhân viên</p>
-                          )}
-                        </div>
-                      </div>
-                      <div className="bg-purple-50 rounded-lg p-3">
-                        <div className="font-semibold text-purple-800 mb-2 text-sm">🕙 Ca B: 10:00 – 21:00</div>
-                        <div className="flex flex-wrap gap-2">
-                          {day.shiftB?.map((emp, i) => (
-                            <div key={i} className="flex items-center gap-1 bg-white rounded-full px-3 py-1.5 shadow-sm">
-                              <EmployeeAvatar name={emp} />
-                              <span className="text-sm">{emp}</span>
-                            </div>
-                          ))}
-                          {(!day.shiftB || day.shiftB.length === 0) && (
-                            <p className="text-xs text-gray-400 italic">Không có nhân viên</p>
-                          )}
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              ))}
             </div>
           </>
         )}
