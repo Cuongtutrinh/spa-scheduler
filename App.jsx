@@ -395,7 +395,7 @@ const EditGroupsModal = ({ isOpen, onClose, groups, onSave, employees }) => {
             <p className="text-xs md:text-sm text-gray-600">
               📌 <strong>Luật đảo ca:</strong>
               <br />
-              - Thứ 3: Nhóm 1 = Ca A (9h-20h), Nhóm 2 = Ca B (10h-21h)
+              - Thứ 3: Nhóm 1 = Ca A (8h30-20h), Nhóm 2 = Ca B (9h30-21h)
               <br />
               - Thứ 4: Nhóm 1 = Ca B, Nhóm 2 = Ca A
               <br />
@@ -684,11 +684,11 @@ const App = () => {
               <div className="flex flex-col md:flex-row gap-3 md:gap-4 justify-center items-center text-xs md:text-sm">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-blue-500 rounded"></div>
-                  <span>Ca A: 9:00 – 20:00</span>
+                  <span>Ca A: 8:30 – 20:00</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-purple-500 rounded"></div>
-                  <span>Ca B: 10:00 – 21:00</span>
+                  <span>Ca B: 9:30 – 21:00</span>
                 </div>
                 <div className="text-gray-500 text-center">
                   🔄 Luật đảo ca: Thứ 3 (Nhóm1:A, Nhóm2:B) → Thứ 4 (Nhóm1:B, Nhóm2:A)...
@@ -711,14 +711,14 @@ const App = () => {
                         {day.dayOfWeek === 1 ? (
                           isCaptureMode ? (
                             <div className="bg-green-50 rounded-lg p-1">
-                              <div className="text-[9px] font-semibold text-green-800 mb-1">9:00-20:00</div>
+                              <div className="text-[9px] font-semibold text-green-800 mb-1">8:30-20:00</div>
                               <p className="text-[9px] leading-tight text-gray-700 break-words">
                                 {(day.allEmployees || []).join(', ')}
                               </p>
                             </div>
                           ) : (
                             <div className="bg-green-50 rounded-lg p-1.5 md:p-3">
-                              <div className="text-[10px] md:text-sm font-semibold text-green-800 mb-1 md:mb-2">🕘 9:00 – 20:00</div>
+                              <div className="text-[10px] md:text-sm font-semibold text-green-800 mb-1 md:mb-2">🕘 8:30 – 20:00</div>
                               <div className="text-[10px] md:text-sm text-gray-700 mb-1 md:mb-2 font-medium">Toàn bộ nhân viên:</div>
                               <div className="space-y-1 max-h-56 md:max-h-64 overflow-y-auto">
                                 {day.allEmployees?.map((emp, i) => (
@@ -736,13 +736,13 @@ const App = () => {
                           isCaptureMode ? (
                             <div className="space-y-1">
                               <div className="bg-blue-50 rounded-lg p-1 border-l-2 border-blue-500">
-                                <div className="text-[9px] font-semibold text-blue-800 mb-1">A 9:00-20:00</div>
+                                <div className="text-[9px] font-semibold text-blue-800 mb-1">A 8:30-20:00</div>
                                 <p className="text-[9px] leading-tight text-gray-700 break-words">
                                   {(day.shiftA || []).join(', ') || 'Không có'}
                                 </p>
                               </div>
                               <div className="bg-purple-50 rounded-lg p-1 border-l-2 border-purple-500">
-                                <div className="text-[9px] font-semibold text-purple-800 mb-1">B 10:00-21:00</div>
+                                <div className="text-[9px] font-semibold text-purple-800 mb-1">B 9:30-21:00</div>
                                 <p className="text-[9px] leading-tight text-gray-700 break-words">
                                   {(day.shiftB || []).join(', ') || 'Không có'}
                                 </p>
@@ -751,7 +751,7 @@ const App = () => {
                           ) : (
                             <div className="space-y-1.5 md:space-y-3">
                               <div className="bg-blue-50 rounded-lg p-1.5 md:p-3 border-l-2 md:border-l-4 border-blue-500">
-                                <div className="text-[10px] md:text-sm font-semibold text-blue-800 mb-1 md:mb-2">🕘 Ca A: 9:00 – 20:00</div>
+                                <div className="text-[10px] md:text-sm font-semibold text-blue-800 mb-1 md:mb-2">🕘 Ca A: 8:30 – 20:00</div>
                                 <div className="space-y-1 max-h-44 md:max-h-48 overflow-y-auto">
                                   {day.shiftA?.map((emp, i) => (
                                     <div key={i} className="flex items-center gap-1 md:gap-2 p-0.5 md:p-1">
@@ -767,7 +767,7 @@ const App = () => {
                                 </div>
                               </div>
                               <div className="bg-purple-50 rounded-lg p-1.5 md:p-3 border-l-2 md:border-l-4 border-purple-500">
-                                <div className="text-[10px] md:text-sm font-semibold text-purple-800 mb-1 md:mb-2">🕙 Ca B: 10:00 – 21:00</div>
+                                <div className="text-[10px] md:text-sm font-semibold text-purple-800 mb-1 md:mb-2">🕙 Ca B: 9:30 – 21:00</div>
                                 <div className="space-y-1 max-h-44 md:max-h-48 overflow-y-auto">
                                   {day.shiftB?.map((emp, i) => (
                                     <div key={i} className="flex items-center gap-1 md:gap-2 p-0.5 md:p-1">
